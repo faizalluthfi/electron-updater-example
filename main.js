@@ -23,7 +23,7 @@ log.info('App starting...');
 // THIS SECTION IS NOT REQUIRED
 //-------------------------------------------------------------------
 let template = []
-if (process.platform === 'darwin') {
+// if (process.platform === 'darwin') {
   // OS X
   const name = app.getName();
   template.unshift({
@@ -31,7 +31,8 @@ if (process.platform === 'darwin') {
     submenu: [
       {
         label: 'About ' + name,
-        role: 'about'
+        role: 'about',
+        click() { autoUpdater.checkForUpdates(); }
       },
       {
         label: 'Quit',
@@ -39,8 +40,8 @@ if (process.platform === 'darwin') {
         click() { app.quit(); }
       },
     ]
-  })
-}
+  });
+// }
 
 
 //-------------------------------------------------------------------
@@ -69,15 +70,19 @@ function createDefaultWindow() {
 }
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...');
+  log.info('Checking for update...');
 })
 autoUpdater.on('update-available', (ev, info) => {
   sendStatusToWindow('Update available.');
+  log.info('Update available.');
 })
 autoUpdater.on('update-not-available', (ev, info) => {
   sendStatusToWindow('Update not available.');
+  log.info('Update not available.');
 })
 autoUpdater.on('error', (ev, err) => {
   sendStatusToWindow('Error in auto-updater.');
+  log.error(err);
 })
 autoUpdater.on('download-progress', (progressObj) => {
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
@@ -120,15 +125,15 @@ app.on('window-all-closed', () => {
 // })
 // autoUpdater.on('download-progress', (ev, progressObj) => {
 // })
-autoUpdater.on('update-downloaded', (ev, info) => {
+// autoUpdater.on('update-downloaded', (ev, info) => {
   // Wait 5 seconds, then quit and install
   // In your application, you don't need to wait 5 seconds.
   // You could call autoUpdater.quitAndInstall(); immediately
-  setTimeout(function() {
-    autoUpdater.quitAndInstall();  
-  }, 5000)
-})
+//   setTimeout(function() {
+//     autoUpdater.quitAndInstall();  
+//   }, 5000)
+// })
 
-app.on('ready', function()  {
-  autoUpdater.checkForUpdates();
-});
+// app.on('ready', function()  {
+//   autoUpdater.checkForUpdates();
+// });
